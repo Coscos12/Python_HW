@@ -6,4 +6,3 @@ def list_sum(x):
         else:
             total = total + i
     return total
-
