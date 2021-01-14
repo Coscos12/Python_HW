@@ -4,3 +4,6 @@ def sentense(text):
     while counter < len(lst):
         yield lst[counter]
         counter += 1
+
+
+c = (counter for counter in text.split())
