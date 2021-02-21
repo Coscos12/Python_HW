@@ -22,33 +22,32 @@ STOCKS = {
     'Facebook': 'FB'
 }
 
-# df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/solar.csv')
+fig = go.Figure()
 for key in STOCKS:
     df = pd.read_csv(f'Aplhavantage/data/stocks/{key}_monthly.csv')
     df = df[(df["timestamp"] > '2020-01-01') & (df["timestamp"] < '2021-01-01')]
     df["name"] = f'{STOCKS[key]}'
     df = df[["timestamp", "name", "open", "high", "low", "close", "volume"]]
+    fig.add_trace(go.Scatter(x=df.timestamp, y=df.volume, mode='lines+markers',
+                             name=f'{STOCKS[key]}'))
     last_table = pd.concat([last_table, df], axis=0)
 
 app = dash.Dash(__name__)
 
 colors = {
     'background': '#111111',
-    'text': '#7FDBFF',
-    'plot_bgcolor':'#202020'
+    'text': '#556B2F',
+    'plot_bgcolor': '#202020'
 }
 
-for key in STOCKS:
-    fig = go.Figure(data=go.Scatter(x=last_table.timestamp, y=last_table.volume, mode='lines+markers',
-                                    name=f'{STOCKS[key]}'))
-    column = [{"name": ["date"], "id": "timestamp"},
-              {"name": ["name"], "id": "name"},
-              dict(name=["open"], id="open", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
-              dict(name=["low"], id="low", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
-              dict(name=["high"], id="high", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
-              dict(name=["close"], id="close", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
-              dict(name=["volume"], id="volume", type='numeric'),
-              ]
+column = [{"name": ["date"], "id": "timestamp"},
+          {"name": ["name"], "id": "name"},
+          dict(name=["open"], id="open", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
+          dict(name=["low"], id="low", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
+          dict(name=["high"], id="high", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
+          dict(name=["close"], id="close", type='numeric', format=Format(precision=2, scheme=Scheme.fixed)),
+          dict(name=["volume"], id="volume", type='numeric'),
+          ]
 
 tabs_styles = {
     'height': '50px',
@@ -56,17 +55,21 @@ tabs_styles = {
 }
 tab_style = {
     'borderBottom': '1px solid #d6d6d6',
+    'vertical-align': 'middle',
+    'backgroundColor': colors['background'],
+    'color': colors['text'],
     'padding': '6px',
     'fontWeight': 'bold',
-    'vertical-align': 'bottom'
+    'font-size': '2rem',
 }
 
 tab_selected_style = {
     'borderTop': '2px solid #1d6791',
     'vertical-align': 'middle',
-    'backgroundColor': '#000000',
-    'color': '#FFFFFF',
+    'backgroundColor': colors['text'],
+    'color': colors['background'],
     'padding': '6px',
+    'font-size': '2rem',
 
 }
 fig.update_layout(
@@ -74,11 +77,14 @@ fig.update_layout(
     paper_bgcolor=colors['background'],
     font_color=colors['text']
 )
-app.layout = html.Div(style={'backgroundColor': colors['background']}, children=[
+app.layout = html.Div(style={'backgroundColor': colors['background'], 'border': '1px solid #000000',
+                             'padding': '1px'}, children=[
     html.H1(
         children='Hello Dash',
         style={
             'textAlign': 'center',
+            'font-size': '3rem',
+            'margin-bottom': '0px',
             'color': colors['text']
         }
     ),
@@ -108,7 +114,8 @@ def render_content(tab):
             html.Div(dash_table.DataTable(
                 id='table',
                 columns=column,
-                style_header={'backgroundColor': 'rgb(30, 30, 30)'},
+                style_header={'backgroundColor': '#E9967A',
+                              'color': '#000000'},
                 style_cell={
                     'backgroundColor': 'rgb(0, 0, 0)',
                     'color': 'white',
