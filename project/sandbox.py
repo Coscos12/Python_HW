@@ -19,13 +19,18 @@ STOCKS = {
     'Alphabet': 'GOOGL',
     'Amazon': 'AMZN',
     'Apple': 'AAPL',
-    'Facebook': 'FB'
+    'Facebook': 'FB',
+    'Microsoft': 'MSFT',
+    'Netflix': 'NFLX',
+    'Oracle': 'ORCL',
+    'Tesla': 'TSLA',
+    'Twitter': 'TWTR'
 }
 
 fig = go.Figure()
 for key in STOCKS:
     df = pd.read_csv(f'Aplhavantage/data/stocks/{key}_monthly.csv')
-    df = df[(df["timestamp"] > '2020-01-01') & (df["timestamp"] < '2021-01-01')]
+    df = df[(df["timestamp"] >= '2020-01-01') & (df["timestamp"] < '2021-01-01')]
     df["name"] = f'{STOCKS[key]}'
     df = df[["timestamp", "name", "open", "high", "low", "close", "volume"]]
     fig.add_trace(go.Scatter(x=df.timestamp, y=df.volume, mode='lines+markers',
