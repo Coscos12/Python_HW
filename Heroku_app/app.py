@@ -26,7 +26,7 @@ fig = go.Figure()
 fig1 = go.Figure()
 
 for key in STOCKS:
-    df = pd.read_csv(f'Aplhavantage/data/stocks/{key}_monthly.csv')
+    df = pd.read_csv(f'Aplhavantage/data/data/stocks/{key}_monthly.csv')
     df = df[(df["timestamp"] >= '2020-01-01') & (df["timestamp"] < '2021-01-01')]
     df["name"] = f'{STOCKS[key]}'
 
@@ -36,7 +36,7 @@ for key in STOCKS:
     last_table = pd.concat([last_table, df], axis=0)
 
 for key in CRYPTO:
-    df = pd.read_csv(f'Aplhavantage/data/crypto/{key}_monthly.csv')
+    df = pd.read_csv(f'Aplhavantage/data/data/crypto/{key}_monthly.csv')
     df = df[(df["timestamp"] >= '2020-01-01') & (df["timestamp"] < '2021-01-01')]
     df["name"] = f'{CRYPTO[key]}'
     df = df[["timestamp", "name", "open (USD)", "high (USD)", "low (USD)", "close (USD)", "volume"]]
@@ -45,7 +45,7 @@ for key in CRYPTO:
                               name=f'{CRYPTO[key]}'))
     last_table1 = pd.concat([last_table1, df], axis=0)
 
-df = pd.read_csv(f'Aplhavantage/data/technical/technical_monthly.csv')
+df = pd.read_csv(f'Aplhavantage/data/data/technical/technical_monthly.csv')
 df.columns = ['id', 'info', 'Real-Time', '1 Day', '5 Day', '1 Month', '3 Month',
               'Year-to-Date', '1 Year', '3 Year', '5 Year', '10 Year']
 df = df.drop([0, 1])
